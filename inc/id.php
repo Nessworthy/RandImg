@@ -1,5 +1,12 @@
 <?php
 /**
+ * @author  Kevin van Zonneveld <kevin@vanzonneveld.net>
+ * @author  Simon Franz
+ * @author  Deadfish
+ * @copyright 2008 Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+ * @license   http://www.opensource.org/licenses/bsd-license.php New BSD Licence
+ * @link      http://kevin.vanzonneveld.net/
+ * 
  * @param mixed $in String or long input to translate
  * @param boolean $to_num Reverses translation when true
  * @param mixed $pad_up Number or boolean pads the result up to a specific length

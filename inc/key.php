@@ -2,6 +2,7 @@
 /**
  * Key generator.
  * @author Jon la Cour
+ * @license MIT License
  * @version 1.0
  */
 class key {
