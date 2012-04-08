@@ -1,7 +1,7 @@
 ## RandImg
 RandImg is simply a random image viewer for image hosts.
 
-[Demo](http://imglurk.in) (Not operated by me.)
+[Demo](http://imglurk.in) (Not operated by me. Content may be NSFW.)
 
 ### Licenses
 RandImg is licensed under the [MIT License](https://github.com/laCour/RandImg/blob/master/LICENSE.md).<br>
