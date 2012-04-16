@@ -1,5 +1,6 @@
 <?php
 require 'inc/include.php';
+// Hello world.
 $key = new key();
 if ($_GET['id']) {
     $id = alphaID($_GET['id'], false);
