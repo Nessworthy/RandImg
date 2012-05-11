@@ -1,32 +1,21 @@
 <?php
 require 'inc/include.php';
 $key = new key();
-if (isset($_COOKIE['source'])) {
-	$source = $_COOKIE['source'];
-}
 if ($_GET['id']) {
     $id = alphaID($_GET['id'], false);
 }
-if ($_GET['s']) {
-	setcookie('source', $_GET['s']);
-    $source = $_GET['s'];
+if (isset($_COOKIE['source'])) {
+    $source = $_COOKIE['source'];
 } else {
     $source = 'imgur';
+}
+if ($_GET['s']) {
+    setcookie('source', $_GET['s']);
+    $source = $_GET['s'];
 }
 
 function generate_hash($length = 5) {
     return key::new_key($length);
-}
-
-function write_image($filename, $url) {
-    $file = 'temp/' . $filename;
-	$ch = curl_init($url);
-	$fp = fopen($file, 'wb');
-	curl_setopt($ch, CURLOPT_FILE, $fp);
-	curl_setopt($ch, CURLOPT_HEADER, 0);
-	curl_exec($ch);
-	curl_close($ch);
-	fclose($fp);
 }
 
 function validate_page($url) {
@@ -40,22 +29,18 @@ function validate_page($url) {
 function validate_hash($hash, $s) {
 	if ($s == 'screensnapr') {
 		$url = 'http://screensnapr.com/e/' . $hash . '.png';
-		$file = 'temp/' . $hash . '.png';
 	} else {
 		$url = 'http://i.imgur.com/' . $hash . '.jpg';
-		$file = 'temp/' . $hash . '.jpg';
 	}
     if (validate_page($url)) {
     	if ($s == 'screensnapr') {
     		return true;
     	}
-        write_image($hash . '.jpg', $url);
-        if (md5_file($file) != 'd835884373f4d6c8f24742ceabe74946') {
-            unlink($file);
-            return true;
-        } else {
-            unlink($file);
+        list($width, $height) = getimagesize($url);
+        if ($width == '161' && $height == '81') {
             return false;
+        } else {
+            return true;
         }
     } else {
         return false;
