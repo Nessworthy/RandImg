@@ -50,7 +50,7 @@ function validate_hash($hash, $s) {
     		return true;
     	}
         write_image($hash . '.jpg', $url);
-        if (md5_file($file) != 'eebc93350a68a64022b7482f460017ba') {
+        if (md5_file($file) != 'd835884373f4d6c8f24742ceabe74946') {
             unlink($file);
             return true;
         } else {
