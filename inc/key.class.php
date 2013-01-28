@@ -11,7 +11,7 @@ class key {
      * Main key generator.
      * @since 1.0
      */
-    protected function _generate_key($length = 10, $amount = 1, $user_key = false, $chars = '') {
+    protected static function _generate_key($length = 10, $amount = 1, $user_key = false, $chars = '') {
         // Create an array for key characters
         $keychars = array();
         $key = '';

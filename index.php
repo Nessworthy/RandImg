@@ -1,8 +1,14 @@
 <?php
 require 'inc/include.php';
 // Hello world.
+
+$id = false;
+$source = false;
+$base_class_str = '_Image';
+
+// TODO: Insert into a controller.
 $key = new key();
-if ($_GET['id']) {
+if (isset($_GET['id'])) {
     $id = alphaID($_GET['id'], false);
 }
 if (isset($_COOKIE['source'])) {
@@ -10,71 +16,17 @@ if (isset($_COOKIE['source'])) {
 } else {
     $source = 'imgur';
 }
-if ($_GET['s']) {
+if (isset($_GET['s'])) {
     setcookie('source', $_GET['s']);
     $source = $_GET['s'];
 }
 
-function generate_hash($length = 5) {
-    return key::new_key($length);
+if($source) {
+	$class = ucfirst($source).$base_class_str;
+	$image = new $class();
+	unset($class);
 }
 
-function validate_page($url) {
-    $handle = curl_init($url);
-    curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
-    $response = curl_exec($handle);
-    $code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-    return ($code == 200) ? true : false;
-}
-
-function validate_hash($hash, $s) {
-	if ($s == 'screensnapr') {
-		$url = 'http://screensnapr.com/e/' . $hash . '.png';
-	} else {
-		$url = 'http://i.imgur.com/' . $hash . '.jpg';
-	}
-    if (validate_page($url)) {
-    	if ($s == 'screensnapr') {
-    		return true;
-    	}
-        list($width, $height) = getimagesize($url);
-        if ($width == '161' && $height == '81') {
-            return false;
-        } else {
-            return true;
-        }
-    } else {
-        return false;
-    }
-}
-
-function get_imgur($hash) {
-    if ($hash == null) {
-        $hash = generate_hash();
-    }
-    if (validate_hash($hash, 'imgur') == true) {
-        return array('url' => 'http://i.imgur.com/' . $hash . '.jpg', 'hash' => $hash);
-    } else {
-        return get_imgur(null);
-    }
-}
-
-function get_screensnapr($hash) {
-    if ($hash == null) {
-        $hash = generate_hash();
-    }
-    if (validate_hash($hash, 'screensnapr') == true) {
-        return array('url' => 'http://screensnapr.com/e/' . $hash . '.png', 'hash' => $hash);
-    } else {
-        return get_screensnapr(null);
-    }
-}
-
-if ($source == 'screensnapr') {
-	$image = ($id) ? get_screensnapr($id) : get_screensnapr(null);
-} else {
-	$image = ($id) ? get_imgur($id) : get_imgur(null);
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -113,7 +65,7 @@ if ($source == 'screensnapr') {
 								<a href="index.php">Random</a>
 							</li>
 							<?php
-                            echo '<li><a href="index.php?id=' . alphaID($image['hash'], true) . '">Permalink</a></li>';
+                            echo '<li><a href="index.php?id=' . alphaID($image->get_hash(), true) . '">Permalink</a></li>';
 							?>
 						</ul>
 						<ul class="nav pull-right">
@@ -138,7 +90,7 @@ if ($source == 'screensnapr') {
 				<div class="span12">
 					<div class="thumbnail">
 						<?php
-                        echo '<img src="' . $image['url'] . '" /><br>';
+                        echo '<img src="' . $image->get_image() . '" /><br>';
 						?>
 					</div>
 				</div>
